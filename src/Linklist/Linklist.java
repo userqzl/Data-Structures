@@ -1,4 +1,4 @@
-package cn.qzl.Excise.Excetion_1.Linklist;
+package Linklist;
 
 /**
  * @description: 单链表实现
@@ -36,6 +36,15 @@ public class Linklist<T> {
 
         node.data = t;    //初始化节点
 
+        Node p;
+        p = head;
+        //找到表尾
+        while(p.next != null){
+            p = p.next;
+        }
+        //添加节点
+        p.next = node;
+        node.next = null;
 
         size++;
     }
@@ -53,7 +62,18 @@ public class Linklist<T> {
 
     //删除最后一个节点
     public T removeLast(){
+        Node p;
+        p = head;
+        //找到表尾
+        while(p.next != null){
+            p = p.next;
+        }
 
+        T t = (T)p.data;
+
+
+
+        return t;
     }
 
     //获取链表长度
@@ -83,7 +103,7 @@ public class Linklist<T> {
     }
 
     public static void main(String[] args) {
-        Linklist<Integer> linklist = new Linklist<>();
+        Linklist<Integer> linklist = new Linklist<Integer>();
         for (int i = 0; i < 10; i++) {
             linklist.addFirst(i);
         }
