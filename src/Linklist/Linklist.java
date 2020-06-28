@@ -1,7 +1,9 @@
 package Linklist;
 
+import java.util.LinkedList;
+
 /**
- * @description: 单链表实现
+ * @description: 带头结点单链表的实现
  * @author: qzl
  * @created: 2020/06/27 15:17
  */
@@ -49,6 +51,27 @@ public class Linklist<T> {
         size++;
     }
 
+    //在指定节点前插入节点
+    public void insertAny(T t,int n){
+        if(n > size){
+            System.out.println("没有第"+n+"个节点");
+        }
+        else {
+            Node p = head;    //遍历指针，指向头结点
+            //创建新结点
+            Node newNode = new Node();
+            newNode.data = t;
+            //扫描链表，让p指向第n个节点的前一个节点
+            for (int i = 1; i < n; i++) {
+                p = p.next;
+            }
+            //在第n个节点前插入新节点
+            newNode.next = p.next;
+            p.next = newNode;
+            size++;    //表长加一
+        }
+    }
+
     //删除表头节点
     public T removeFirst(){
         T temp = null;
@@ -64,16 +87,38 @@ public class Linklist<T> {
     public T removeLast(){
         Node p;
         p = head;
-        //找到表尾
-        while(p.next != null){
+        //找到倒数第二个节点
+        while(p.next.next != null){
             p = p.next;
         }
 
-        T t = (T)p.data;
-
-
-
+        //倒数第二个节点指向空，并返回最后一个节点的数据
+        T t = (T)p.next.data;
+         p.next = null;
+         size--;
         return t;
+    }
+
+    //删除指定节点
+    public T removeAny(int n){
+        if(n > size || n < 1 || isEmpty()){
+            System.out.println("第"+n+"个节点不存在");
+            return null;
+        }
+        else {
+            //两个指针扫描链表，扫描至第n的节点和第n-1个节点
+            Node p,r;
+            p = head;
+            r = head.next;
+            for(int i = 1;i < n;i++){
+                p = p.next;
+                r = r.next;
+            }
+            //删除第n个节点并返回节点上的数据
+            p.next = r.next;
+            size--;  //表长减一
+            return (T)r.data;
+        }
     }
 
     //获取链表长度
@@ -100,6 +145,9 @@ public class Linklist<T> {
     public static class Node<T>{
         T data;    //数据域
         Node next;    //指向下一个节点
+        Node(){
+            next = null;
+        }
     }
 
     public static void main(String[] args) {
@@ -107,13 +155,20 @@ public class Linklist<T> {
         for (int i = 0; i < 10; i++) {
             linklist.addFirst(i);
         }
-        System.out.println("链表长度为："+linklist.getSize());
-        System.out.println(linklist);
+        System.out.println(linklist+"  长度："+linklist.getSize());
 
         System.out.println("第一个节点已删除，数据为"+linklist.removeFirst());
+        System.out.println(linklist+"  长度："+linklist.getSize());
 
-        System.out.println("链表长度为："+linklist.getSize());
-        System.out.println(linklist);
+        System.out.println("最后一个节点已删除，数据为"+linklist.removeLast());
+        System.out.println(linklist+"  长度："+linklist.getSize());
+
+        System.out.println("在第3个节点前插入新节点");
+        linklist.insertAny(100,3);
+        System.out.println(linklist+"  长度："+linklist.getSize());
+
+        System.out.println("第"+5+"个节点已删除，数据为"+linklist.removeAny(5));
+        System.out.println(linklist+"  长度："+linklist.getSize());
 
     }
 }
